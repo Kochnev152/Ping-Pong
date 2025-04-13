@@ -67,4 +67,21 @@ while game:
         window.blit(background, (0,0))
         player_1.update_1()
         player_2.update_2()
+        ball.rect.x += ball_x_speed
+        ball.rect.y += ball_y_speed
+        if ball.colliderect(player_1.rect):
+            ball_x_speed *= -1
+        if ball.rect.y > 420 or ball.rect < 80:
+            ball_y_speed *= -1
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(loser, (200,200))
+        if ball.rect.x > 500:
+            finish = True
+            window.blit(winner, (200,200))
+        player_1.reset()
+        player_2.reset()
+        
+clock.tick(FPS)
+display.update()
         

@@ -1,7 +1,14 @@
 #Создай собственный Шутер!
 
 from pygame import *
-
+clock = time.Clock()
+FPS = 60
+window = display.set_mode((700,500))
+name = display.set_caption('Ping-Pong')
+background = transform.scale(image.load('mountain.jpg'),(700,500))
+x_random = randint(50,630)
+player__x = 300
+player = Player('rocket.png',player__x,400,0)
 class GameSprite(sprite.Sprite):
     def __init__(self,player_image,player_x,player_y,player_speed,size_x=65,size_y=65):
         super().__init__()
@@ -20,13 +27,44 @@ class GameSprite(sprite.Sprite):
         return self.rect.colliderect(rect)
 
 class Player(GameSprite):
-    def update(self):
+    def update_1(self):
         keys_pressed = key.get_pressed()
-        if keys_pressed[K_LEFT] and self.rect.x >= 10:
-            self.rect.x -= 10
-        if keys_pressed[K_RIGHT] and self.rect.x <= 620:
-            self.rect.x += 10
-        if keys_pressed[K_UP] and self.rect.y >= 10:
-            self.rect.y -= 10
-        if keys_pressed[K_DOWN] and self.rect.y <= 420:
-            self.rect.y += 10
+        if keys_pressed[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys_pressed[K_s] and self.rect.y < 420:
+            self.rect.y += self.speed
+            
+    def update_2(self):
+        keys_pressed = key.get_pressed()
+        if keys_pressed[K_UP] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys_pressed[K_DOWN] and self.rect.y < 420:
+            self.rect.y += self.speed
+
+window = display.set_mode((700,500))
+name = display.set_caption('Ping-Pong')
+background = transform.scale(image.load('mountain.jpg'),(700,500))
+ball_x = 350
+ball_y = 250
+ball_x_speed = 5
+ball_y_speed = 5
+player_1 = Player('racket.png',10,250,5,80,80)
+player_2 = Player('racket.png',690,250,5,80,80)
+ball = Player('tennis.png',ball_x,ball_y,5,80,80)
+game = True
+finish = False
+font.init()
+
+font_loser = font.Font('Arial', 60)
+font = font.Font('Arial', 36)
+loser = font_loser.render('Игрок 1 проиграл', True, (255,0,0))
+winner = font_loser.render('Игрок 2 проиграл', True, (0,255,0))
+while game:
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+    if finish == False:
+        window.blit(background, (0,0))
+        player_1.update_1()
+        player_2.update_2()
+        

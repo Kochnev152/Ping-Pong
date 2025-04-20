@@ -1,14 +1,9 @@
-#Создай собственный Шутер!
-
 from pygame import *
+from random import randint
 clock = time.Clock()
 FPS = 60
-window = display.set_mode((700,500))
-name = display.set_caption('Ping-Pong')
-background = transform.scale(image.load('mountain.jpg'),(700,500))
-x_random = randint(50,630)
-player__x = 300
-player = Player('rocket.png',player__x,400,0)
+
+
 class GameSprite(sprite.Sprite):
     def __init__(self,player_image,player_x,player_y,player_speed,size_x=65,size_y=65):
         super().__init__()
@@ -44,19 +39,17 @@ class Player(GameSprite):
 window = display.set_mode((700,500))
 name = display.set_caption('Ping-Pong')
 background = transform.scale(image.load('mountain.jpg'),(700,500))
-ball_x = 350
+ball_x = 250
 ball_y = 250
-ball_x_speed = 5
-ball_y_speed = 5
+ball_x_speed = 6
+ball_y_speed = 3
 player_1 = Player('racket.png',10,250,5,80,80)
-player_2 = Player('racket.png',690,250,5,80,80)
+player_2 = Player('racket.png',610,250,5,80,80)
 ball = Player('tennis.png',ball_x,ball_y,5,80,80)
 game = True
 finish = False
 font.init()
-
-font_loser = font.Font('Arial', 60)
-font = font.Font('Arial', 36)
+font_loser = font.Font(None, 60)
 loser = font_loser.render('Игрок 1 проиграл', True, (255,0,0))
 winner = font_loser.render('Игрок 2 проиграл', True, (0,255,0))
 while game:
@@ -64,24 +57,29 @@ while game:
         if e.type == QUIT:
             game = False
     if finish == False:
+        game = True
         window.blit(background, (0,0))
         player_1.update_1()
         player_2.update_2()
+        ball.reset()
         ball.rect.x += ball_x_speed
         ball.rect.y += ball_y_speed
         if ball.colliderect(player_1.rect):
             ball_x_speed *= -1
-        if ball.rect.y > 420 or ball.rect < 80:
+            ball_y_speed += 1
+        if ball.rect.y > 420 or ball.rect.y < 0:
             ball_y_speed *= -1
         if ball.rect.x < 0:
             finish = True
             window.blit(loser, (200,200))
-        if ball.rect.x > 500:
+        if ball.rect.x > 700 :
             finish = True
             window.blit(winner, (200,200))
+        if ball.colliderect(player_2.rect):
+            ball_x_speed *= -1
         player_1.reset()
         player_2.reset()
         
-clock.tick(FPS)
-display.update()
+    clock.tick(FPS)
+    display.update()
         

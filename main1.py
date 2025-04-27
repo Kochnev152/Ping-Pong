@@ -56,6 +56,7 @@ while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
+            finish = True
     if finish == False:
         game = True
         window.blit(background, (0,0))
